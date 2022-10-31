@@ -124,7 +124,7 @@ This is an example of an abstract object:
 
 \begin{ffcode}
 [a b] > sum
-  a.add b > @
+  a.plus b > @
   a > leftOperand
   b > rightOperand
 \end{ffcode}
@@ -139,12 +139,12 @@ sum 2 5 > closedCopyOfSum
   0 > @
   "0" > stringValue
   # Closed objects may have abstract attributes
-  [x] > add
+  [x] > plus
     sum 0 x > @ 
   # And closed attributes, too
   [] > neg
     -0 > @
-  $.add 1 > addOne
+  $.plus 1 > plusOne
 \end{ffcode}
 
 \section{Attributes}
