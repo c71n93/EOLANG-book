@@ -161,13 +161,13 @@ There are no access modifiers in the EO programming language. All attributes of 
 
 Example. The Horizontal Dot Notation
 \begin{ffcode}
-(5.add 7).mul 10 > calc
+(5.plus 7).times 10 > calc
 \end{ffcode}
 
 Example. The Vertical Dot Notation
 \begin{ffcode}
-mul. > calc
-  add.
+times. > calc
+  plus.
     5
     7
   10
@@ -195,9 +195,11 @@ Example
   42 > magicNumbe
   [] > childObject
     24 > magicNumber
-    add. > @
-      ^.magicNumber # refers to the parent object's attr
-      magicNumber # refers to $.magicNumber
+    plus. > @
+      # refers to the parent object's attr
+      ^.magicNumber
+      # refers to $.magicNumber
+      magicNumber
 \end{ffcode}
 
 \section{Abstraction}
