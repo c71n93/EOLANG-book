@@ -190,6 +190,7 @@ The  \textasciicircum is used to refer to the parent object.
 The \textasciicircum attribute may be used to access attributes of a parent object inside of the current object with the dot notation (e.g., \textasciicircum.attrA).
 
 Example
+%TODO: figgure out what to do with comments
 \begin{ffcode}
 [] > parentObject
   42 > magicNumber
@@ -225,16 +226,17 @@ Anonymous Abstraction
 There are two types of anonymous abstraction: inline and plain multi-line.
 Plain Multi-line Anonymous Abstraction
 
+%TODO: to figuure out how does Anonymous Abstraction work
 \begin{ffcode}
 [a b]
-  a.add b > @
+  a.plus b > @
 \end{ffcode}
 
 The same can be expressed in just one line.
 Inline Anonymous Abstraction
 
 \begin{ffcode}
-[a b] a.add b
+[a b] (a.plus b)
 \end{ffcode}
 
 EBNF
@@ -249,6 +251,7 @@ label ::= '@' | NAME '...'?
 NAME ::= [a-z][a-z0-9_A-Z]*
 \end{ffcode}
 
+%TODO: to figuure out what does all this code mean
 Examples
 \begin{ffcode}
 # no free attributes abstraction
@@ -261,7 +264,7 @@ Examples
   # an attribute
   [a] > addSomeMagic
     # application again
-    magicalNumber.add a > @
+    magicalNumber.plus a > @
 
 # variable-length attribute abstraction
 [a b c args...] > app
@@ -271,7 +274,7 @@ Examples
     sprintf
       "\n%d\n%d\n"
       args.get 0
-      magicalObject.magicalNumber.add a
+      magicalObject.magicalNumber.plus a
 
 # anonymous abstraction
 [args...] > app
