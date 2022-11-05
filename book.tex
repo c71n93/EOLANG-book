@@ -226,7 +226,6 @@ Anonymous Abstraction
 There are two types of anonymous abstraction: inline and plain multi-line.
 Plain Multi-line Anonymous Abstraction
 
-%TODO: to figuure out how does Anonymous Abstraction work
 \begin{ffcode}
 [a b]
   a.plus b > @
@@ -236,7 +235,7 @@ The same can be expressed in just one line.
 Inline Anonymous Abstraction
 
 \begin{ffcode}
-[a b] (a.plus b)
+[a b] a.plus b
 \end{ffcode}
 
 EBNF
@@ -251,7 +250,7 @@ label ::= '@' | NAME '...'?
 NAME ::= [a-z][a-z0-9_A-Z]*
 \end{ffcode}
 
-%TODO: to figuure out what does all this code mean
+%TODO: to figuure out what to do with comments
 Examples
 \begin{ffcode}
 # no free attributes abstraction
@@ -267,33 +266,33 @@ Examples
     magicalNumber.plus a > @
 
 # variable-length attribute abstraction
-[a b c args...] > app
+[args...] > app
   # the next five lines are examples of 
   # application
   stdout > @
     sprintf
       "\n%d\n%d\n"
-      args.get 0
+      args.at 0
       magicalObject.magicalNumber.plus a
 
 # anonymous abstraction
 [args...] > app
-  reduce. > sum
-    args
+  reduced. > sum
+    (list args)
     0
     [accumulator current] # <--- this is anonymous
     # abstraction
-      add. > @
+      plus. > @
         accumulator
-        current.toInt
+        (text current).as-int
 
 # inline anonymous abstraction
 [args...] > app
   reduce. > sum
     args
     0
-    # inline anonymous abstraction
-    [accumulator current] accumulator.add (current.toInt)
+    # abstraction
+    [accumulator current] (accumulator.plus (text current).as-int > @)
 \end{ffcode}
 
 \section{Application}
