@@ -235,7 +235,7 @@ The same can be expressed in just one line.
 Inline Anonymous Abstraction
 
 \begin{ffcode}
-[a b] a.plus b
+[a b] (a.plus b > @)
 \end{ffcode}
 
 EBNF
@@ -323,10 +323,11 @@ This implementation of the EO programming language DOES NOT support partial appl
 
 Essentially, application is used to bind free attributes of abstract objects to make their concrete and more specific copies. Application allows binding arbitrary number of free attributes, which can be used to partially apply objects.
 
+%TODO: figure out how partial application should work
 \begin{ffcode}
 # abstract object
 [a b] > sum
-  a.add b > @
+  a.plus b > @
 
 # we can partially apply it to create a new, more
 #specific concept
