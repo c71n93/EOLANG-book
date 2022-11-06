@@ -153,7 +153,7 @@ An attribute is a pair of a name and a value, where a value of an attribute is a
 \subsection{Free \& Bound Attributes.}
 Binding is an operation of associating an attribute's value with some object. An attribute may be bound to some object only once.
 An attribute that is not bound to any object is named a free attribute. An attribute that has some object associated with its value is called a bound attribute.
-Free attributes may be declared through the object abstraction only. Binding may be performed either during object declaration using the bind (>) operator (see the abstraction section for more information) or through object copying (see the application section for details).
+Free attributes may be declared through the object abstraction only. Binding may be performed either during object declaration using the bind ($>$) operator (see the abstraction section for more information) or through object copying (see the application section for details).
 
 \subsection{Accessing Attributes. The Dot Notation}
 There are no access modifiers in the EO programming language. All attributes of all objects are publicly visible and accessible. To access attributes of objects, the dot notation is used. The dot notation can be used to retrieve values of attributes and not to bind attributes with objects.
@@ -173,7 +173,7 @@ times. > calc
   10
 \end{ffcode}
 
-Here, add is an attribute of the object 5 and mul is an attribute of the attribute object add (or, more precisely, an attribute of an object that add abstracts or dataizes to, which is an integer number int).
+Here, plus is an attribute of the object 5 and times is an attribute of the attribute object plus (or, more precisely, an attribute of an object that plus abstracts or dataizes to, which is an integer number int).
 
 \subsection{The '@' attribute}
 The \@ attribute is named phi (after the Greek letter $\varphi$). The \@ character is reserved for the phi attribute and cannot be used for any other purpose. Every object has its own and only \@ attribute. The \@ attribute can be bound to a value only once.
@@ -218,7 +218,7 @@ The abstraction syntax includes the following elements:
         \item Containing one or more attribute names ([a] or [a b c d e]). In this case, the listed attribute names are the free attributes of the declared object.
         \item Containing a variable-length attribute ([animals...]). The attribute must be at the end of the list of attributes to work properly. Internally, this attribute is represented by the array object.
     \end{enumerate}
-    \item (optional) Binding to a name ( > myObject). Declared objects may be anonymous. However, anonymous objects must be used in application only (i.e., we can only supply anonymous objects for binding them to free attributes during application).
+    \item (optional) Binding to a name ( $>$ myObject). Declared objects may be anonymous. However, anonymous objects must be used in application only (i.e., we can only supply anonymous objects for binding them to free attributes during application).
     \item (optional) The object may be declared as constant (i.e., dataized only once (see this section)), if the object is bound to a name (see \#3). For this, the ! operator is used.
     \item (optional) The object may be declared as an atom (i.e., its implementation is made out of the EO language (for instance, in Java)) if the object is bound to a name (see \#3). For this, the / operator is used (for example, /bool).
 \end{enumerate}
@@ -314,7 +314,7 @@ The application syntax is quite wide, so let's point out the constituents to per
         \item Containing one or more objects. In this case, the listed objects will be bound to the free attributes of the applied object in their order of appearance.
         \item Containing one or more objects with names after each (like 1:a 5:b 9:c). In this case, the listed objects will be bound to the corresponding free attributes of the applied object.
     \end{enumerate}
-    \item (optional) Binding to a name ( > myObject).
+    \item (optional) Binding to a name ( $>$ myObject).
     \item (optional) The copied object may be declared as constant (i.e., dataized only once (see this section)), if the object is bound to a name (see \#3). For this, the ! operator is used.
 \end{enumerate}
 
@@ -342,7 +342,7 @@ Examples
 42 > magicalNumber
 
 # horizontal application of 
-# the add attribute of the magicalNumber
+# the plus attribute of the magicalNumber
 magicalNumber.plus 1 > secondMagicalNumber
 
 # vertical application
@@ -673,7 +673,7 @@ IN$:
 
 \subsection{float Data Type Object}
 The float data type object represents a double-precision 64-bit IEEE 754 floating-point number and can be used to perform various FPU computations.
-Fully Qualified Name: org.org.eolang.float (no aliasing or FQN reference required since the object is automatically imported).
+Fully Qualified Name: org.eolang.float (no aliasing or FQN reference required since the object is automatically imported).
 
 \subsubsection{Syntax}
 The float data type object may be parsed by the EO compiler directly from the source code. The syntax rules for values are as follows.
@@ -686,8 +686,8 @@ FLOAT    ::= ( '+' | '-' )? [0-9]+ '.' [0-9]+
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
@@ -711,8 +711,8 @@ If the eq attribute object is applied, it represents the result of the equality 
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
@@ -765,8 +765,8 @@ IN$:
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
@@ -794,16 +794,20 @@ Example
 
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
++alias text org.eolang.txt.text
 
 [args...] > app
   stdout > @
     sprintf
       "%s%s%s"
-      "  Hello There  ".trim
-      "            !           ".trim
-      "\n".trim
+      trim.
+        text "  Hello There  "
+      trim.
+        text "            !           "
+      trim.
+        text "\n"
 
 Running
 
@@ -813,31 +817,36 @@ Here, the \n escape sequence is trimmed as it is a
 whitespace character.
 \end{ffcode}
 
-\subsubsection{toInt Attribute}
-The toInt attribute object is used for parsing the base string object as an int object.
+\subsubsection{as-int Attribute}
+The as-int attribute object is used for parsing the base string object as an int object.
 The format of the base string object must be as described below:
 
 The first character of the string literal may be either + or -. This indicates the sign of the int value. The sign may be omitted (in such a case, the number is positive).
 All the other characters of the string literal must be decimal digits (0-9).
-If the format of the base string object is incorrect, the toInt attribute will fail on its application.
-The toInt attribute object has no free attributes.
-If the toInt attribute object is applied (called), it represents the parsed int object.
+If the format of the base string object is incorrect, the as-int attribute will fail on its application.
+The as-int attribute object has no free attributes.
+If the as-int attribute object is applied (called), it represents the parsed int object.
 
 Example
 
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
++alias text org.eolang.txt.text
 
 [args...] > app
   stdout > @
     sprintf
       "%d\n%d\n%d\n%d\n"
-      "1700".toInt
-      "-1500".toInt
-      "8".toInt
-      "-0".toInt
+    as-int.
+      text "1700"
+    as-int.
+      text "-1500"
+    as-int.
+      text "8"
+    as-int.
+      text "-0"
 
 Running
 
@@ -848,9 +857,10 @@ OUT>: 8
 OUT>: 0
 IN$: 
 \end{ffcode}
-int Data Type Object
+
+\subsection{int Data Type Object}
 The int data type object represents a 64-bit integer number.
-Fully Qualified Name: org.org.eolang.int (no aliasing or FQN reference required since the object is automatically imported).
+Fully Qualified Name: org.eolang.int (no aliasing or FQN reference required since the object is automatically imported).
 
 Syntax
 The int data type object may be parsed by the EO compiler directly from the source code. The syntax rules for values are as follows.
@@ -872,8 +882,8 @@ The Int Data Type Railroad Diagram (HEX Notation)
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
@@ -881,7 +891,7 @@ Example
       "%d\n%d\n%d\n%#01x\n"
       -157
       1009283
-      0xf.add 1
+      0xf.plus 1
       0xa
 
 Running
@@ -894,23 +904,21 @@ OUT>: 0xa
 IN$: 
 \end{ffcode}
 
-
-
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
-
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
+    
 [args...] > app
   stdout > @
-    sprintf
-      "%b\n%b\n"
-      eq.
-        0xf
-        15
-      15.eq (0xf.add 1)
-
+  sprintf
+    "%b\n%b\n"
+    eq.
+      0xf
+      15
+    15.eq (0xf.plus 1)
+    
 Running
 
 IN$: ./run.sh
@@ -919,68 +927,22 @@ OUT>: false
 IN$: 
 \end{ffcode}
 
-\subsection{int Data Type Object}
-The int data type object represents a 64-bit integer number.
-Fully Qualified Name: org.org.eolang.int (no aliasing or FQN reference required since the object is automatically imported).
-
-Syntax
-The int data type object may be parsed by the EO compiler directly from the source code. The syntax rules for values are as follows.
-EBNF Notation
-
-\begin{ffcode}
-INT      ::= ( '+' | '-' )? [0-9]+
-\end{ffcode}
-There is also an alternative syntax for hexadecimal numerals (i.e., with the base 16). This notation implies only non-negative values.
-
-\begin{ffcode}
-HEX      ::= '0x' [0-9a-f]+
-\end{ffcode}
-
-
-And an alternative notation for HEX integers:
-The Int Data Type Railroad Diagram (HEX Notation)
-
-Example
-\begin{ffcode}
-+package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
-
-[args...] > app
-  stdout > @
-    sprintf
-      "%d\n%d\n%d\n%#01x\n"
-      -157
-      1009283
-      0xf.add 1
-      0xa
-
-Running
-
-IN$: ./run.sh
-OUT>: -157
-OUT>: 1009283
-OUT>: 16
-OUT>: 0xa
-IN$: 
-\end{ffcode}
-
-\subsubsection{less Attribute}
-The less attribute object is used for testing if its base int object is less than its x free attribute (i.e. \$ < x).
+\subsubsection{lt Attribute}
+The lt attribute object is used for testing if its base int object is less than its x free attribute (i.e. \$ $<$ x).
 If the less attribute object is fully applied, it represents the result of the testing (either true (if the base object is less than x free attribute of the less) or false (otherwise)).
 
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
     sprintf
       "%b\n%b\n"
-      -7.less 0
-      less.
+      -7.lt 0
+      lt.
         0
         0
 
@@ -991,24 +953,25 @@ OUT>: true
 OUT>: false
 IN$: 
 \end{ffcode}
-add Attribute
-The add attribute object is used to calculate the sum of its base int object and the free attribute x of type int (i.e. \$+x).
-If the add attribute object is fully applied, it represents the resulting sum of the integer numbers.
+
+\subsubsection{plus Attribute}
+The plus attribute object is used to calculate the sum of its base int object and the free attribute x of type int (i.e. \$+x).
+If the plus attribute object is fully applied, it represents the resulting sum of the integer numbers.
 
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
     sprintf
       "%d\n%d\n"
-      add.
+      plus.
         0x10
         16
-      -16.add 0x10
+      -16.plus 0x10
 
 Running
 
@@ -1017,24 +980,25 @@ OUT>: 32
 OUT>: 0
 IN$: 
 \end{ffcode}
-sub Attribute
-The sub attribute object is used to calculate the difference between its base int object and the free attribute x of type int (i.e. \$-x).
-If the sub attribute object is fully applied, it represents the resulting difference of the integer numbers.
+
+\subsubsection{minus Attribute}
+The minus attribute object is used to calculate the difference between its base int object and the free attribute x of type int (i.e. \$-x).
+If the minus attribute object is fully applied, it represents the resulting difference of the integer numbers.
 
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
     sprintf
       "%d\n%d\n"
-      sub.
+      minus.
         0x10
         16
-      -16.sub 0x10
+      -16.minus 0x10
 
 Running
 
@@ -1051,8 +1015,8 @@ If the neg attribute object is applied (called), it represents the resulting neg
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
@@ -1060,8 +1024,8 @@ Example
       "%d\n%d\n%d\n%d\n"
       5.neg
       0x10.neg
-      (17.add 3).neg
-      17.neg.add 3
+      (17.plus 3).neg
+      17.neg.plus 3
 
 Running
 
@@ -1073,27 +1037,27 @@ OUT>: -14
 IN$: 
 \end{ffcode}
 
-\subsubsection{mul Attribute}
-The mul attribute object is used to calculate the product of its base int object and the free attribute x of type int (i.e. \$ × x).
-If the mul attribute object is fully applied, it represents the resulting product of the integer numbers.
+\subsubsection{times Attribute}
+The times attribute object is used to calculate the product of its base int object and the free attribute x of type int (i.e. \$ × x).
+If the times attribute object is fully applied, it represents the resulting product of the integer numbers.
 
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
     sprintf
       "%d\n%d\n%d\n%d\n%d\n"
-      -7.mul 0
-      13.mul 1
-      mul.
+      -7.times 0
+      13.times 1
+      times.
         0x10
         0x10
-      ((10.mul 10).mul 10).mul 10
-      10.mul 10.mul 10.mul 10
+      ((10.times 10).times 10).times 10
+      10.times 10.times 10.times 10
 
 Running
 
@@ -1110,8 +1074,8 @@ IN$:
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
@@ -1136,8 +1100,8 @@ The relationship between the mod and div operations is as follows:
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
@@ -1163,14 +1127,14 @@ IN$:
 \end{ffcode}
 
 \subsubsection{pow Attribute}
-The pow attribute object is used to calculate the power of its base int object and the free attribute x of type int (i.e. \$\^x).
+The pow attribute object is used to calculate the power of its base int object and the free attribute x of type int (i.e. \$\textasciicircum x).
 If the pow attribute object is fully applied, it represents the resulting power of the base int object raised to the power of the x attribute.
 
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
@@ -1192,14 +1156,14 @@ OUT>: 1
 OUT>: 2
 IN$: 
 \end{ffcode}
-Here, 2\^(-10) results in 0 as well as raising all the integer numbers (except 0) to the negative power (-1, -2, -3, ...).
+Here, 2\textasciicircum(-10) results in 0 as well as raising all the integer numbers (except 0) to the negative power (-1, -2, -3, ...).
 
 \section{char Data Type Object}
 The char data type object represents a single character.
 
 The char object is not implemented yet, hence the char cannot be used for now.
 
-Fully Qualified Name: org.org.eolang.char (no aliasing or FQN reference required since the object is automatically imported).
+Fully Qualified Name: org.eolang.char (no aliasing or FQN reference required since the object is automatically imported).
 
 \subsubsection{Syntax}
 The char data type object may be parsed by the EO compiler directly from the source code. The syntax rules for values are as follows.
@@ -1214,7 +1178,7 @@ The EO Standard Object Collection contains two objects for the CLI output: sprin
 
 \subsection{Plain Text Output. stdout}
 For plain text output, the stdout object is used.
-Fully Qualified Name: org.org.eolang.io.stdout.
+Fully Qualified Name: org.eolang.io.stdout.
 
 \subsubsection{Usage}
 The stdout object has one free attribute text that should be bound to the text to print.
@@ -1225,7 +1189,7 @@ For the complete list of escape sequences supported by stdout, see the correspon
 Example 1. The Plain Old “Hello, World”
 \begin{ffcode}
 +package sandbox
-+alias stdout org.org.eolang.io.stdout
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   (stdout "Hello, World!\n") > @
@@ -1233,13 +1197,16 @@ Running
 IN$: ./run.sh
 OUT>: Hello, World!
 IN$: 
+\end{ffcode}
+
 Example 2. Print the First Word of the User's Input
+\begin{ffcode}
 +package sandbox
-+alias stdout org.org.eolang.io.stdout
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
-    get.
+    at.
       args
       0
 Running
@@ -1252,7 +1219,7 @@ Note: here, the Hello is printed with no EOL character at the end of the line be
 \subsection{Formatting Strings. sprintf}
 For strings formatting, the sprintf object is used.
 String formatting is the process of data injection into the string, optionally applying format patterns to the data.
-Fully Qualified Name: org.org.eolang.txt.sprintf.
+Fully Qualified Name: org.eolang.txt.sprintf.
 
 \subsubsection{Usage}
 The sprintf object has two free attributes:
@@ -1265,14 +1232,14 @@ For the format syntax reference, see this article.
 Example. Format 'Em All
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   sprintf > formatted_string
     "int: %d, bool: %b, string: %s\n"
     2
-    (2.less 0)
+    (2.lt 0)
     "Hey"
 
   (stdout formatted_string) > @
@@ -1286,25 +1253,25 @@ IN$:
 
 \section{Arrays}
 The EO Standard Object Collection contains the array object for working with arrays of objects.
-Fully Qualified Name: org.org.eolang.array (no aliasing or FQN reference required since the object is automatically imported).
+Fully Qualified Name: org.eolang.array (no aliasing or FQN reference required since the object is automatically imported).
 
-\subsection{get Attribute}
-The get attribute object is used to retrieve an object stored at the position i of the base array object.
+\subsection{at Attribute}
+The at attribute object is used to retrieve an object stored at the position i of the base array object.
 The position i must be within 0 and the length of the array inclusively.
-When applied, the get attribute object represents the object stored at the position i of the base array object.
+When applied, the at attribute object represents the object stored at the position i of the base array object.
 
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
     sprintf
       "%s\n%s\n"
-      args.get 0
-      args.get 1
+      args.at 0
+      args.at 1
 
 \end{ffcode}
 
@@ -1318,24 +1285,24 @@ OUT>: World!
 IN$: 
 \end{ffcode}
 
-\subsection{append Attribute}
-The append attribute object is used to append the x object at the end of the base array object.
-When applied, the append attribute object represents the resulting array object with the x at the end of it.
+\subsection{with Attribute}
+The with attribute object is used to append the x object at the end of the base array object.
+When applied, the with attribute object represents the resulting array object with the x at the end of it.
 
 \begin{ffcode}
 Example
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
-  args.append "New Element!" > argsExtended
+  args.with "New Element!" > argsExtended
   stdout > @
     sprintf
       "%s\n%s\n%s\n"
-      argsExtended.get 0
-      argsExtended.get 1
-      argsExtended.get 2
+      argsExtended.at 0
+      argsExtended.at 1
+      argsExtended.at 2
 
 \end{ffcode}
 In this example, the args array is used that consists of the CLI parameters passed to the program.
@@ -1363,17 +1330,19 @@ When applied, the reduce attribute object represents the resulting reduced accum
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
++alias list org.eolang.collections.list
++alias text org.eolang.txt.text
 
 [args...] > app
   [accumulator current] > reduceFunction
-    add. > @
+    plus. > @
       accumulator
-      current.toInt
+      (text current).as-int
 
   reduce. > sum
-    args
+    list args
     0
     reduceFunction
 
@@ -1397,13 +1366,13 @@ The EO Standard Object Collection contains the seq object for sequencing computa
 The seq object has one free attribute steps that may have an arbitrary number of steps that will be evaluated one by one, from the beginning to the end in the sequential order.
 The seq object starts the dataization process for each of the objects bound to the steps attribute of it.
 On dataization, the seq object evaluates into the bool object true.
-Fully Qualified Name: org.org.eolang.seq (no aliasing or FQN reference required since the object is automatically imported).
+Fully Qualified Name: org.eolang.seq (no aliasing or FQN reference required since the object is automatically imported).
 
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   seq > @
@@ -1425,7 +1394,7 @@ IN$:
 This implementation of the EO programming language DOES NOT support the memory standard object. This was the conceptual design decision that might change in future!
 
 The EO Standard Object Collection contains the memory object for mutable storage in RAM.
-Fully Qualified Name: org.org.eolang.memory (no aliasing or FQN reference required since the object is automatically imported).
+Fully Qualified Name: org.eolang.memory (no aliasing or FQN reference required since the object is automatically imported).
 Usage To use the memory object, the following steps are needed:
 
 Make a copy of the memory object and bound it to some attribute.
@@ -1434,16 +1403,16 @@ To retrieve the object stored in the memory, dataization of the memory object is
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   memory > m
   seq > @
     m.write 1
-    m.write (m.add 1)
-    m.write (m.add 1)
-    m.write (m.add 1)
+    m.write (m.plus 1)
+    m.write (m.plus 1)
+    m.write (m.plus 1)
     stdout (sprintf "%d\n" m)
 
 Running
@@ -1544,7 +1513,7 @@ Already exists. The object abstracts behavior
 LOC:
 \begin{ffcode}
 [x a b c] > polynomial 
-  (((x.pow 2).mul a).add (x.mul b)).add c > @
+  (((x.pow 2).times a).plus (x.times b)).plus c > @
   
 \end{ffcode}
 \subsection{Java}
@@ -1799,9 +1768,9 @@ The Ford-Falkerson Algorithm is used to solve the maximum flow problem. This alg
 
 To understand and implement it, let us first look at the concept of Residual Graph.
 
-Residual Graph of a flow network is a graph which indicates additional possible flow. If there is a path from source to sink in residual graph, then it is possible to add flow. Every edge of a residual graph has a value called residual capacity which is equal to original capacity of the edge minus current flow. Residual capacity is basically the current capacity of the edge. Let us now talk about implementation details. Residual capacity is 0 if there is no edge between two vertices of residual graph. We can initialize the residual graph as original graph as there is no initial flow and initially residual capacity is equal to original capacity. To find an augmenting path, we can either do a BFS or DFS of the residual graph. We have used DFS in below implementation. Using DFS, we can find out if there is a path from source to sink.
+Residual Graph of a flow network is a graph which indicates additional possible flow. If there is a path from source to sink in residual graph, then it is possible to plus flow. Every edge of a residual graph has a value called residual capacity which is equal to original capacity of the edge minus current flow. Residual capacity is basically the current capacity of the edge. Let us now talk about implementation details. Residual capacity is 0 if there is no edge between two vertices of residual graph. We can initialize the residual graph as original graph as there is no initial flow and initially residual capacity is equal to original capacity. To find an augmenting path, we can either do a BFS or DFS of the residual graph. We have used DFS in below implementation. Using DFS, we can find out if there is a path from source to sink.
 
-The important thing is, we need to update residual capacities in the residual graph. We subtract path flow from all edges along the path and we add path flow along the reverse edges We need to add path flow along reverse edges because may later need to send flow in reverse direction.
+The important thing is, we need to update residual capacities in the residual graph. We subtract path flow from all edges along the path and we plus path flow along the reverse edges We need to plus path flow along reverse edges because may later need to send flow in reverse direction.
 
 \subsubsection{Time Complexity:}
 Time complexity of the above algorithm is O(max\_flow E).
@@ -1860,7 +1829,7 @@ For C++ and Java, static typing is used to control the data at compile time. In 
 
 Currently, the EO community is limited. There are not many conferences, local meetups, forums, Facebook groups, open-source projects based on the language and people willing to help. 
 
-Also, as mentioned in section \ref{table:metrics}, Eolang lacks \textbf{simplicity}. The EO language is barely simple to read and write and has a quite steep learning curve for new programmers. In comparison to the other languages in context, corresponding code in Eolang takes consumes more lines \textbf{(LOC)}. The comparison made in section \ref{table:metrics} shows that Eolang has minimal efficiency in terms of \textbf{memory consumption} and \textbf{compilation speed}. Thus, Eolang consumes a lot of resources, and increasing becomes complex as the code base gets large. These add to the weaknesses of the language.
+Also, as mentioned in section \ref{table:metrics}, Eolang lacks \textbf{simplicity}. The EO language is barely simple to read and write and has a quite steep learning curve for new programmers. In comparison to the other languages in context, corresponding code in Eolang takes consumes more lines \textbf{(LOC)}. The comparison made in section \ref{table:metrics} shows that Eolang has minimal efficiency in terms of \textbf{memory consumption} and \textbf{compilation speed}. Thus, Eolang consumes a lot of resources, and increasing becomes complex as the code base gets large. These plus to the weaknesses of the language.
 
 Lastly, conceptual incompleteness. The Eolang concept or idea is not fully or completely described.
 
@@ -1938,7 +1907,7 @@ Provides an interface for creating families of interconnected or interdependent 
 31.	
 32.	[args...] > appAbstractFactory
 33.	  abstractFactory > objFactory
-34.	    args.get 0
+34.	    args.at 0
 35.	  stdout > @
 36.	    sprintf
 37.	      "ProductA: %s\nProductB: %s\n"
@@ -2092,7 +2061,7 @@ A request initiated by a client is moved along the chain until some ConcreteHand
 48.	    sprintf
 49.	      "%s\n"
 50.	hChain. process
-51.	        args.get 0 
+51.	        args.at 0 
 
 \end{ffcode}
 
@@ -2150,7 +2119,7 @@ In Eolang, the concept of null does not exist as every object is meant to dataiz
 9.	    if.
 10.	      args.isEmpty
 11.	      null
-12.	      args.get 0 
+12.	      args.at 0 
 
 \end{ffcode}
 
@@ -2184,13 +2153,13 @@ In Eolang, a copy of an object can be made, and new functionality be added. Here
 8.	   decorateWithMoreCars num > @
 9.	
 10.	   [number] > decorateWithMoreCars
-11.	     add. > @
+11.	     plus. > @
 12.	       carsDecorate
 13.	       number
 14.	
 15.	[args...] > appDecorator
 16.	  stdout > @
-17.	    someCars (args.get 0) 
+17.	    someCars (args.at 0) 
 
 \end{ffcode}
 
@@ -2226,8 +2195,8 @@ Implementations of the Product interface are products. Inheritors of the Builder
 First, we should mention that the problem solved by the Builder pattern may be addressed by the partial application mechanism embedded into the language as one of its features. The partial application mechanism allows programmers to partially apply objects (i.e., create objects with some or all of the input attributes omitted and then, optionally, set unbound attributes after throughout the program). This technique may be utilized as a more concise alternative to constructor overloading. Here is an example:
 \begin{ffcode}
 [a b c name] > triangle
-  add. > perimeter
-    add.
+  plus. > perimeter
+    plus.
       a
       b
     c
@@ -2348,7 +2317,7 @@ The EO programming language does not have interfaces, classes, and types. Becaus
   [] > createObject
   # operation over products
   [] > performOperation
-    createObject.getWeight.add 1 > @
+    createObject.getWeight.plus 1 > @
 
 [] > concreteCreatorA
   creator > @
@@ -2374,13 +2343,13 @@ The EO programming language does not have interfaces, classes, and types. Becaus
 
 \end{ffcode}
 
-Here, we have the creator object with the performOperation attribute (the logic to be reused) and the createObject attribute (the logic to be redefined for flexible substitution of objects). The concreteCreatorA and concreteCreatorB objects have the creator object as their decoratee, so that these might inherit the reusable logic. Both objects define the createObject attribute that hides the original attribute of the same name from the decoration hierarchy. Objects productA and productB implement the attribute of interest (getWeight) differently. One of them may get the value from the production server, while another takes it from the testing environment. This example demonstrates the implementation of the classic version of the pattern in EO. However, we may consider a more EO-idiomatic example, free from additional structures (concrete creators) utilized in statically typed class-based object-oriented languages such as Java or C++. Consider the following example: 
+Here, we have the creator object with the performOperation attribute (the logic to be reused) and the createObject attribute (the logic to be redefined for flexible substitution of objects). The concreteCreatorA and concreteCreatorB objects have the creator object as their decoratee, so that these might inherit the reusable logic. Both objects define the createObject attribute that hides the original attribute of the same name from the decoration hierarchy. Objects productA and productB implement the attribute of interest (getWeight) differently. One of them may at the value from the production server, while another takes it from the testing environment. This example demonstrates the implementation of the classic version of the pattern in EO. However, we may consider a more EO-idiomatic example, free from additional structures (concrete creators) utilized in statically typed class-based object-oriented languages such as Java or C++. Consider the following example: 
 
 \begin{ffcode}
 [@] > creator
   # operation over products
   [] > performOperation
-    createObject.getWeight.add 1 > @
+    createObject.getWeight.plus 1 > @
 
 [] > productA
   # let's suppose that this implementation
@@ -2399,7 +2368,7 @@ Here, we have the creator object with the performOperation attribute (the logic 
     []
       [] > createObject
         if. > @
-          (args.get 0).eq "test"
+          (args.at 0).eq "test"
           productB
           productA
 
@@ -2465,7 +2434,7 @@ We surely may reproduce the similar technique of capturing the lexical scope in 
   memory 0 > privateCounter
   [val] > changeBy
     privateCounter.write > @
-      privateCounter.add val
+      privateCounter.plus val
   [] > @
     [] > increment
       ^.^.changeBy 1 > @
