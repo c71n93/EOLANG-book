@@ -416,7 +416,7 @@ Create new file \ff{lab1.eo} in sandbox folder, and enter the code below:
 \begin{ffcode}
 +alias stdout org.eolang.io.stdout
 
-[] > lab1
+[args...] > lab1
   stdout > @
     "Hello, world!"
 \end{ffcode}
@@ -430,29 +430,29 @@ The EO Programming Language and The EO Standard Object Collection defines these 
 
 \subsection{bool Data Type Object}
 The bool data type object represents a boolean value (either true or false) that can be used for performing logical operations.
-Fully Qualified Name: org.org.eolang.bool (no aliasing or CFQN reference required since the object is automatically imported).
+Fully Qualified Name: org.eolang.bool (no aliasing or CFQN reference required since the object is automatically imported).
 
 \subsubsection{Syntax}
 The bool data type object may be parsed by the EO compiler directly from the source code. The syntax rules for bool values are as follows.
 EBNF Notation
 
 \begin{ffcode}
-BOOL     ::= 'true'
-           | 'false'
+BOOL     ::= 'TRUE'
+           | 'FALSE'
 \end{ffcode}
 Railroad Diagram
 
 \begin{ffcode}
 Example
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 [args...] > app
   stdout > @
     sprintf
       "%b\n%b\n"
-      true
-      false
+      TREU
+      FALSE
 
 Running
 
@@ -466,31 +466,31 @@ IN$:
 The if attribute object is used for value substitution based on a condition that can be evaluated as a bool object.
 The if attribute object has two free attributes:
 
-t for the substitution if the base bool object is true.
-f for the substitution if the base bool object is false.
+\textit{t} for the substitution if the base bool object is true.
+\textit{f} for the substitution if the base bool object is false.
 If the if attribute object is fully applied, it represents the corresponding substitution value.
 
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
     sprintf
       "%s\n%s\n%s\nThe max(2, 5) is: %d\n"
-      true.if
+      TRUE.if
         "the first value is true"
         "the first value is false"
-      false.if
+      FALSE.if
         "the second value is true"
         "the second value is false"
       if.
-        2.less 3
+        2.lt 3
         "2 is less than 3"
         "2 is not less than 3"
-      (5.less 2).if
+      (5.lt 2).if
         2
         5
 
@@ -513,25 +513,25 @@ In this example, all the answers from the previous example (the if attribute sec
 
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
     sprintf
       "[NOT Edition (all the answers are inversed with
       .not)]\n%s\n%s\n%s\nThe max(2, 5) is: %d\n"
-      true.not.if
+      TRUE.not.if
         "the first value is true"
         "the first value is false"
-      false.not.if
+      FALSE.not.if
         "the second value is true"
         "the second value is false"
       if.
-        (2.less 3).not
+        (2.lt 3).not
         "2 is less than 3"
         "2 is not less than 3"
-      (5.less 2).not.if
+      (5.lt 2).not.if
         2
         5
 
@@ -556,14 +556,14 @@ If the and attribute object is applied, it represents the conjunction of the bas
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
-  true > a
-  true > b
-  true > c
-  false > d
+  TRUE > a
+  TRUE > b
+  TRUE > c
+  FALSE > d
   stdout > @
     sprintf
       "a && b = %b\na && b && c = %b\na && b 
@@ -594,14 +594,14 @@ If the or attribute object is applied, it represents the disjunction of the base
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
-  false > a
-  false > b
-  false > c
-  true > d
+  TRUE > a
+  TRUE > b
+  TRUE > c
+  FALSE > d
   stdout > @
     sprintf
       "a || b = %b\na || b || c = %b\na || b || c 
@@ -634,21 +634,21 @@ Since objects are immutable, the memory object should be used as the loop condit
 Example
 \begin{ffcode}
 +package sandbox
-+alias stdout org.org.eolang.io.stdout
-+alias sprintf org.org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
 
 [args...] > app
-  memory > x
+  memory 0 > x
   seq > @
     x.write 0
     while.
-      x.less 11
+      x.lt 11
       [i]
         seq > @
           stdout
             sprintf "%d x %d x %d = %d\n" 
-            x x i (x.mul (x.mul i))
-          x.write (x.add 1)
+            x x i (x.times (x.times i))
+          x.write (x.plus 1)
           
 Here, the i attribute of the f iteration object is 
 used to find the x^3. However, the i attribute may 
@@ -731,7 +731,7 @@ IN$:
 
 \subsection{string Data Type Object}
 The string data type object represents a string literal.
-Fully Qualified Name: org.org.eolang.string (no aliasing or FQN reference required since the object is automatically imported).
+Fully Qualified Name: org.eolang.string (no aliasing or FQN reference required since the object is automatically imported).
 
 \subsubsection{Syntax}
 The string data type object may be parsed by the EO compiler directly from the source code. The syntax rules for values are as follows.
@@ -744,8 +744,8 @@ STRING   ::= '"' ( '\"' | [^"] )* '"'
 Example
 \begin{ffcode}
 +package sandbox
-+alias sprintf org.org.eolang.txt.sprintf
-+alias stdout org.org.eolang.io.stdout
++alias sprintf org.eolang.txt.sprintf
++alias stdout org.eolang.io.stdout
 
 [args...] > app
   stdout > @
