@@ -343,13 +343,13 @@ Examples
 
 # horizontal application of 
 # the add attribute of the magicalNumber
-magicalNumber.add 1 > secondMagicalNumber
+magicalNumber.plus 1 > secondMagicalNumber
 
 # vertical application
 # & application inside application
-sub. > esotericNumericalEssence
-  mul.
-    add.
+minus. > esotericNumericalEssence
+  times.
+    plus.
       magicalNumber
       22
     17
@@ -378,7 +378,7 @@ Say, we have the purchase object that represents a purchase of some item that ha
 
 [] > purchaseTotal
   purchase > @
-  mul. > total
+  times. > total
     @.itemCost
     @.itemQuantity
 \end{ffcode}
@@ -394,13 +394,14 @@ Dataization is the operation of evaluation of data laying behind an object. The 
     \item Otherwise, D(obj) = D(obj\.@). That is, if the object is neither data nor an atom, then the object "asks" its decoratee to find the data behind it.
 \end{enumerate}
 
-It is important to note that if the \@ attribute of the object (or any underlying object in the dataization recursive evaluation tree) is absent (free), then the dataization will fail.
-If we want to dataize the object x, all objects and attributes that are used in the definition of the \@ attribute of the x will be dataized. Like this, if we want to dataize the attribute x.attr, all objects and attributes that are used in the definition of its \@ attribute will be dataized.
+It is important to note that if the @ attribute of the object (or any underlying object in the dataization recursive evaluation tree) is absent (free), then the dataization will fail.
+If we want to dataize the object x, all objects and attributes that are used in the definition of the @ attribute of the x will be dataized. Like this, if we want to dataize the attribute x.attr, all objects and attributes that are used in the definition of its @ attribute will be dataized.
 The opposite is true. If the attribute x.attr or the object x itself are not used in the declaration of y, then D(y) will not dataize them and they will not be evaluated and executed. Thus, the dataization operation may be referred to as the lazy object evaluation (i.e., EO dataizes objects only when this is needed).
 
 
 \section{EO syntax}
-\begin{figure*}[tb]
+\begin{figure*}[h]
+  \centering
   \includegraphics[width=1\textwidth,]{EOsyntxax.jpg}
   \caption{EO Syntax}
   \label{fig:uml1}
