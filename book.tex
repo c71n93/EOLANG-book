@@ -1102,17 +1102,18 @@ Example
 +package sandbox
 +alias sprintf org.eolang.txt.sprintf
 +alias stdout org.eolang.io.stdout
++alias number org.eolang.math.number
 
 [args...] > app
   stdout > @
     sprintf
       "%d\n%d\n%d\n%d\n%d\n%d\n"
-      2.mod 1
-      7.mod 5
-      113.mod 10
-      113.mod -10
-      -113.mod 10
-      -113.mod -10
+      (number 2).mod 1
+      (number 7).mod 5
+      (number 113).mod 10
+      (number 113).mod -10
+      (number -113).mod 10
+      (number -113).mod -10
 
 Running
 
@@ -1120,8 +1121,8 @@ IN$: ./run.sh
 OUT>: 0
 OUT>: 2
 OUT>: 3
-OUT>: -7
-OUT>: 7
+OUT>: 3
+OUT>: -3
 OUT>: -3
 IN$: 
 \end{ffcode}
@@ -1135,16 +1136,17 @@ Example
 +package sandbox
 +alias sprintf org.eolang.txt.sprintf
 +alias stdout org.eolang.io.stdout
++alias number org.eolang.math.number
 
 [args...] > app
   stdout > @
     sprintf
       "%d\n%d\n%d\n%d\n%d\n"
-      2.pow 10
-      -2.pow 3
-      2.pow -10
-      2.pow 0
-      2.pow 1
+      (number 2).pow 10
+      (number -2).pow 3
+      (number 2).pow -10
+      (number 2).pow 0
+      (number 2).pow 1
 
 Running
 
