@@ -647,7 +647,7 @@ Example
         seq > @
           stdout
             sprintf "%d x %d x %d = %d\n" 
-            x x i (x.times (x.times i))
+              x x i (x.times (x.times i))
           x.write (x.plus 1)
           
 Here, the i attribute of the f iteration object is 
@@ -1393,8 +1393,6 @@ IN$:
 \end{ffcode}
 
 \section{Mutable Storage in Memory. memory}
-This implementation of the EO programming language DOES NOT support the memory standard object. This was the conceptual design decision that might change in future!
-
 The EO Standard Object Collection contains the memory object for mutable storage in RAM.
 Fully Qualified Name: org.eolang.memory (no aliasing or FQN reference required since the object is automatically imported).
 Usage To use the memory object, the following steps are needed:
@@ -1851,7 +1849,7 @@ It may also be worth noting the problem associated with the lack of type control
 
 \chapter{Design patterns in EO}
 
-\section{Backround}
+\section{Background}
 Design is one of the most difficult task in software development  and Developers, who have eagerly adopted them over the past years, needed to understand not only design patterns but the software systems before they can maintain them, even in cases where documentation and/or design models are missing or of a poor quality. In most cases only the source code as the basic form of documentation is available. Maintenance is a time-consuming activity within software development, and it requires a good understanding of the system in question. The knowledge about design patterns can help developers to understand the underlying architecture faster. Using design patterns is a widely accepted method to improve software development.
 A design pattern is a general reusable solution to a commonly occurring  problem in software design. A design pattern isn't a finished design that can be transformed directly into code neither are they static entities, but evolving descriptions of best practices. It is a description or template for how to solve a problem that can be used in many different situations. A design pattern systematically names, motivates, and explains a general design that addresses a recurring design problem in object-oriented systems. It describes the problem, the solution, when to apply the solution, and its consequences. It also gives implementation hints.
 Design patterns help to effectively speed up development and engineering processes by providing proven development patterns/paradigms. Quality software design requires considering issues that may not be visible until later in the implementation. Reusing design patterns helps to avoid subtle issues that may be catastrophic and help improve code reliability for programmers and architects familiar with the patterns. 
@@ -1870,13 +1868,13 @@ Provides an interface for creating families of interconnected or interdependent 
     \item ConcreteFactory — specific factory: implements operations that create specific objects-products.
     \item AbstractProduct — abstract product: declares the interface for the type of object-product.
     \item ConcreteProduct — specific product: defines the product object created by the corresponding particular factory, and implements the AbstractProductinterface.
-    \item Client: uses only interfaces that are declared in the AbstractFactory and  AbstractProductclasses.
+    \item Client: uses only interfaces that are declared in the AbstractFactory and  AbstractProduct classes.
 \end{enumerate}
 
 \subsubsection{Implementation}
 \begin{ffcode}
 1.	+package sandbox
-2.	+alias stdout org. eolang. io. stdout
+2.	+alias stdout org.eolang.io.stdout
 3.	+alias sprintf org.eolang.txt.sprintf
 4.	
 5.	[type] > abstractFactory
@@ -1984,7 +1982,7 @@ Separate abstraction from its implementation so that both can be changed indepen
 \subsubsection{Participants}
 \begin{enumerate}
     \item Abstraction — abstraction: defines the abstraction interface, and stores a reference to an object of type Implementor.
-    \item RefinedAbstraction —  refined abstraction: extends the interface defined by abstraction abstraction.
+    \item RefinedAbstraction —  refined abstraction: extends the interface defined by abstraction.
     \item Implementor — implementer: defines the interface for the implementation classes. it does not have to exactly match the interface of the abstraction class. In fact both interfaces can be completely different. usually the interface of the Implementor class provides only primitive operations, and the  Abstraction class defines higher-level operations based on these primitives.
     \item ConcreteImplementor —  specific implementer: implements the interface of the Implementor class and defines its specific implementation.
 \end{enumerate}
@@ -2061,7 +2059,7 @@ A request initiated by a client is moved along the chain until some ConcreteHand
 47.	  stdout > @
 48.	    sprintf
 49.	      "%s\n"
-50.	hChain. process
+50.	      hChain.process
 51.	        args.at 0 
 
 \end{ffcode}
@@ -2110,25 +2108,29 @@ In Eolang, the concept of null does not exist as every object is meant to dataiz
 \subsubsection{Implementation}
 \begin{ffcode}
 1.	+package sandbox
-2.	+alias sprintf org.eolang.io.sprintf
-3.	
-4.	[] > null
-5.	  "null" > @
-6.	
-7.	[args...] > appNull
-8.	  sprintf > @
-9.	    if.
-10.	      args.isEmpty
-11.	      null
-12.	      args.at 0 
+2.	+alias stdout org.eolang.io.stdout
+3.	+alias sprintf org.eolang.txt.sprintf
+4.	+alias list org.eolang.collections.list
+5.	
+6.	[] > null
+7.	  "null" > @
+8.	
+9.	[args...] > appNull
+10.	  stdout > @
+11.	    sprintf
+12.	      "%s\n"
+13.	      if.
+14.	        (list args).is-empty
+15.	        null
+16.	        args.at 0 
 
 \end{ffcode}
 
-\textbf{output:}
-
-
-run.cmd
+\textbf{Output:}
+\begin{ffcode}
+$ ./run.sh
 null
+\end{ffcode}
 
 \section{Decorator}
 Decorator is a structural design pattern.
@@ -2145,22 +2147,28 @@ In Eolang, a copy of an object can be made, and new functionality be added. Here
 \subsubsection{Implementation}
 \begin{ffcode}
 1.	+package sandbox
-2.	+alias sprintf org.eolang.io.sprintf
-3.	
-4.	[] > carsDecorate
-5.	  8 > @
-6.	
-7.	[num] > someCars
-8.	   decorateWithMoreCars num > @
-9.	
-10.	   [number] > decorateWithMoreCars
-11.	     plus. > @
-12.	       carsDecorate
-13.	       number
-14.	
-15.	[args...] > appDecorator
-16.	  stdout > @
-17.	    someCars (args.at 0) 
+2.	+alias stdout org.eolang.io.stdout
+3.	+alias sprintf org.eolang.txt.sprintf
+4.	+alias text org.eolang.txt.text
+5.	
+6.	[] > carsDecorate
+7.	  8 > @
+8.	
+9.	[num] > someCars
+10.	   decorateWithMoreCars num > @
+11.	
+12.	   [number] > decorateWithMoreCars
+13.	     plus. > @
+14.	       carsDecorate
+15.	       number
+16.	
+17.	[args...] > appDecorator
+18.	  stdout > @
+19.	    sprintf
+20.	      "%d\n"
+21.	      someCars
+22.	        as-int.
+23.	          text (args.at 0)
 
 \end{ffcode}
 
@@ -2168,14 +2176,15 @@ In this example, the object “someCars” increases the number of cars in decar
 
 \textbf{Output}
 
-
-run.cmd 5
+\begin{ffcode}
+$ ./run.sh 5
 13
+\end{ffcode}
 
 It can be concluded that decorator design pattern naturally exits in Eolang.
 
 \section{Builder}
-Suppose, we have a class with a variety of input parameters. The input parameters are used to configure instances of the class. Some of the parameters may be optional, while some of them are mandatory to be sat up. Hence, the following techniques of configuration of instances of the class may be applied:
+Suppose, we have a class with a variety of input parameters. The input parameters are used to configure instances of the class. Some of the parameters may be optional, while some of them are mandatory to be set up. Hence, the following techniques of configuration of instances of the class may be applied:
 \begin{enumerate}
     \item Configuration of instance variables of an object directly in the user code through Setter Methods calls or by referencing variables straightforwardly. This practice may not be considered appropriate because it makes code instances more cohesive and interdependent while violating encapsulation of the inner state of objects (which may lead to breaking of the integrity of business logic of an application), and, hence, the usage of the practice is not encouraged. In addition, this technique may allow situations in which objects are being in an incomplete state, which also may break the logic of an application.
     \item Creation of subclasses of the considered class when each successor has a slightly changed prototype of its constructors. This technique implies that prototypes of constructors of different subclasses have subsets of optional parameters in them while omitting some parameters, which makes it possible to create configurable instances of objects in a controlled manner. This practice is more encouraged to be applied in practice since it implies control over the creational process. However, it is not recommended for use when choosing the sole parent superclass is challenging or when the practice produces a wide or deep hierarchy of inheritance
@@ -2266,8 +2275,7 @@ Consider the following example:
         val.length.neq 0
         val
         error
-          "The name of a triangle must not
-          be empty!"
+          "The name of a triangle must not be empty!"
 
 [args...] > app
   builder > b
