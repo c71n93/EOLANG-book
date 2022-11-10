@@ -132,8 +132,11 @@ A closed object is an object whose all attributes are bound.
 These are examples of closed objects:
 
 \begin{ffcode}
-# Application can turn an abstract object to a closed one
 sum 2 5 > closedCopyOfSum
+\end{ffcode}
+Application can turn an abstract object to a closed one
+
+\begin{ffcode}
 # Abstraction can declare closed objects
 [] > zero
   0 > @
@@ -197,11 +200,10 @@ Example
   [] > childObject
     24 > magicNumber
     plus. > @
-      # refers to the parent object's attr
       ^.magicNumber
-      # refers to $.magicNumber
       magicNumber
 \end{ffcode}
+Here \textasciicircum.magicNumber refers to the parent object's attribute and magicNumber refers to \$.magicNumber
 
 \section{Abstraction}
 Abstraction is the operation of declaring a new object. Abstraction allows declaring both abstract and closed, anonymous and named objects.
@@ -317,36 +319,16 @@ The application syntax is quite wide, so let's point out the constituents to per
     \item (optional) Binding to a name ( $>$ myObject).
     \item (optional) The copied object may be declared as constant (i.e., dataized only once (see this section)), if the object is bound to a name (see \#3). For this, the ! operator is used.
 \end{enumerate}
-
-\subsection{Partial Application}
-This implementation of the EO programming language DOES NOT support partial application yet. It was one of the design desicion made. However, it might change in future!
-
-Essentially, application is used to bind free attributes of abstract objects to make their concrete and more specific copies. Application allows binding arbitrary number of free attributes, which can be used to partially apply objects.
-
-%TODO: figure out how partial application should work
+Here application with no binding
 \begin{ffcode}
-# abstract object
-[a b] > sum
-  a.plus b > @
-
-# we can partially apply it to create a new, more
-#specific concept
-sum 10 > addTen
-# we can apply this copied object, too
-addTen 10 > twenty
-\end{ffcode}
-
-Examples
-\begin{ffcode}
-# here application with no binding
 42 > magicalNumber
-
-# horizontal application of 
-# the plus attribute of the magicalNumber
+\end{ffcode}
+Horizontal application of the plus attribute of the magicalNumber
+\begin{ffcode}
 magicalNumber.plus 1 > secondMagicalNumber
-
-# vertical application
-# & application inside application
+\end{ffcode}
+Vertical application \& application inside application
+\begin{ffcode}
 minus. > esotericNumericalEssence
   times.
     plus.
@@ -354,6 +336,24 @@ minus. > esotericNumericalEssence
       22
     17
   10
+\end{ffcode}
+
+\subsection{Partial Application}
+This implementation of the EO programming language DOES NOT support partial application yet. It was one of the design desicion made. However, it might change in future!
+
+Essentially, application is used to bind free attributes of abstract objects to make their concrete and more specific copies. Application allows binding arbitrary number of free attributes, which can be used to partially apply objects.
+
+\begin{ffcode}
+# abstract object
+[a b] > sum
+  a.plus b > @
+\end{ffcode}
+
+We can partially apply it to create a new, more specific concept:
+\begin{ffcode}
+sum 10 > addTen
+# we can apply this copied object, too
+addTen 10 > twenty
 \end{ffcode}
 
 \section{Decoration}
@@ -624,8 +624,6 @@ IN$:
 \end{ffcode}
 
 \subsubsection{while Attribute}
-This implementation of the EO programming language DOES NOT support the bool.while standard attribute. This was the conceptual design decision that might change in future!
-
 The while attribute object is used to evaluate its f free attribute until the base bool object is not false.
 The f attribute object must have the free attribute i (the current iteration of the while loop).
 On dataization, the while attribute object evaluates to the number of iterations the loop took.
@@ -640,15 +638,18 @@ Example
 [args...] > app
   memory 0 > x
   seq > @
-    x.write 0
     while.
       x.lt 11
       [i]
         seq > @
           stdout
-            sprintf "%d x %d x %d = %d\n" 
-              x x i (x.times (x.times i))
-          x.write (x.plus 1)
+            sprintf "%d x %d x %d = %d\n"
+              x
+              x
+              i
+              x.times (x.times i)
+          x.write
+            x.plus 1
           
 Here, the i attribute of the f iteration object is 
 used to find the x^3. However, the i attribute may 
@@ -1367,7 +1368,7 @@ IN$:
 The EO Standard Object Collection contains the seq object for sequencing computations.
 The seq object has one free attribute steps that may have an arbitrary number of steps that will be evaluated one by one, from the beginning to the end in the sequential order.
 The seq object starts the dataization process for each of the objects bound to the steps attribute of it.
-On dataization, the seq object evaluates into the bool object true.
+On dataization, the seq object evaluates into the result of datazation of the last step.
 Fully Qualified Name: org.eolang.seq (no aliasing or FQN reference required since the object is automatically imported).
 
 Example
@@ -2355,7 +2356,8 @@ The EO programming language does not have interfaces, classes, and types. Becaus
 Here, we have the creator object with the performOperation attribute (the logic to be reused) and the createObject attribute (the logic to be redefined for flexible substitution of objects). The concreteCreatorA and concreteCreatorB objects have the creator object as their decoratee, so that these might inherit the reusable logic. Both objects define the createObject attribute that hides the original attribute of the same name from the decoration hierarchy. Objects productA and productB implement the attribute of interest (getWeight) differently. One of them may at the value from the production server, while another takes it from the testing environment. This example demonstrates the implementation of the classic version of the pattern in EO. However, we may consider a more EO-idiomatic example, free from additional structures (concrete creators) utilized in statically typed class-based object-oriented languages such as Java or C++. Consider the following example: 
 
 \begin{ffcode}
-[@] > creator
+[concreteCreator] > creator
+  concreteCreator.createObject > createObject
   # operation over products
   [] > performOperation
     createObject.getWeight.plus 1 > @
@@ -2383,7 +2385,7 @@ Here, we have the creator object with the performOperation attribute (the logic 
 
 \end{ffcode}
 
-Here, we used the technique of passing decoratee as a free attribute of the object creator. Its decoratee is passed in the app object. The decoratee has the only attribute createObject that the creator object inherits and relies on. The createObject attribute decides what version of a product should be chosen based on the environment configuration. This implementation of the pattern may be considered as more idiomatic and flexible from the EO perspective.
+Here, we used the technique of passing concreteCreator as a free attribute of the object creator. Its concreteCreator is passed in the app object. The decoratee has the only attribute createObject that the creator object inherits and relies on. The createObject attribute decides what version of a product should be chosen based on the environment configuration. This implementation of the pattern may be considered as more idiomatic and flexible from the EO perspective.
 
 
 \section{The Closures Functional Programming Technique}
@@ -2446,11 +2448,11 @@ We surely may reproduce the similar technique of capturing the lexical scope in 
       privateCounter.plus val
   [] > @
     [] > increment
-      ^.^.changeBy 1 > @
+      ^.changeBy 1 > @
     [] > decrement
-      ^.^.changeBy (-1) > @
+      ^.changeBy (-1) > @
     [] > value
-      ^.^.privateCounter > @
+      ^.privateCounter > @
 
 \end{ffcode}
 
