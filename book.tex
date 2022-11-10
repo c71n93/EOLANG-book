@@ -501,7 +501,7 @@ IN$:
 \end{ffcode}
 
 \subsubsection{eq Attribute}
-The eq attribute object is used for testing if two bytes objects are equal.The eq attribute object has one free attribute x of type bytes that is the second object (the first object is the base object of the eq attribute).
+The eq attribute object is used for testing if two bytes objects are equal. The eq attribute object has one free attribute x of type bytes that is the second object (the first object is the base object of the eq attribute).
 If the eq attribute object is applied, it represents the result of the equality test (either true (if the objects are equal) or false (otherwise)).
 
 Example
@@ -525,7 +525,90 @@ OUT>: false
 IN$: 
 \end{ffcode}
 
-\subsubsection{Attributes}
+\subsubsection{and, or, xor Attributes}
+Attributes objects and, or, xor are used for the bitwise operation of the same name. This attributes objects has one free attribute x of type bytes that is the second object (the first object is the base object of the and attribute).
+
+Example
+\begin{ffcode}
++package sandbox
++alias stdout org.eolang.io.stdout
++alias org.eolang.txt.sprintf
+
+[args...] > app
+  stdout > @
+    sprintf
+      "%b\n%b\n%b\n"
+      eq.
+        FF-.and 00-
+        00-
+      eq.
+        FF-.or 00-
+        FF-
+      eq.
+        FF-.xor FF-
+        00-
+    
+Running
+
+IN$: ./run.sh
+OUT>: true
+OUT>: true
+OUT>: true
+IN$: 
+\end{ffcode}
+
+\subsubsection{not Attributes}
+The not attribute object is used for the bitwise operation of the same name. This attributes objects has no free attributes.
+
+Example
+\begin{ffcode}
++package sandbox
++alias stdout org.eolang.io.stdout
++alias org.eolang.txt.sprintf
+    
+[args...] > app
+  stdout > @
+    sprintf
+      "%b\n%b\n%b\n"
+      eq.
+        FF-.not
+        00-
+    
+Running
+    
+IN$: ./run.sh
+OUT>: true
+IN$: 
+\end{ffcode}
+
+\subsubsection{left, right Attributes}
+Attributes objects left, right are used for left and right bitwise shift. This attributes objects has one free attribute x of type int that is the second object (the first object is the base object of the and attribute).
+The free attribute x specifies how many bits to shift.
+
+Example
+\begin{ffcode}
++package sandbox
++alias stdout org.eolang.io.stdout
++alias org.eolang.txt.sprintf
+
+[args...] > app
+  stdout > @
+    sprintf
+      "%b\n%b\n"
+      eq.
+        02-.left 2
+        08-
+      eq.
+        10-.right 3
+        02-
+    
+Running
+    
+IN$: ./run.sh
+OUT>: true
+OUT>: true
+IN$: 
+\end{ffcode}
 
 \section{bool Data Type Object}
 The bool data type object represents a boolean value (either true or false) that can be used for performing logical operations.
