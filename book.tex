@@ -161,13 +161,14 @@ Free attributes may be declared through the object abstraction only. Binding may
 \subsection{Accessing Attributes. The Dot Notation}
 There are no access modifiers in the EO programming language. All attributes of all objects are publicly visible and accessible. To access attributes of objects, the dot notation is used. The dot notation can be used to retrieve values of attributes and not to bind attributes with objects.
 
+\subsubsection{Examples}
 
-Example. The Horizontal Dot Notation
+The Horizontal Dot Notation
 \begin{ffcode}
 (5.plus 7).times 10 > calc
 \end{ffcode}
 
-Example. The Vertical Dot Notation
+The Vertical Dot Notation
 \begin{ffcode}
 times. > calc
   plus.
@@ -192,8 +193,7 @@ The \$ attribute may be used to access attributes of an object inside of the obj
 The  \textasciicircum is used to refer to the parent object.
 The \textasciicircum attribute may be used to access attributes of a parent object inside of the current object with the dot notation (e.g., \textasciicircum.attrA).
 
-Example
-%TODO: figgure out what to do with comments
+\subsubsection{Example}
 \begin{ffcode}
 [] > parentObject
   42 > magicNumber
@@ -252,46 +252,46 @@ label ::= '@' | NAME '...'?
 NAME ::= [a-z][a-z0-9_A-Z]*
 \end{ffcode}
 
-%TODO: to figuure out what to do with comments
-Examples
-\begin{ffcode}
-# no free attributes abstraction
-[] > magicalObject
-  # here we use application to define an 
-  # attribute
-  42 > magicalNumber
+\subsubsection{Examples}
 
-  # and here we use abstraction to define 
+No free attributes abstraction
+\begin{ffcode}
+[] > magicalObject
+  42 > magicalNumber
+  # here we use abstraction to define 
   # an attribute
   [a] > addSomeMagic
-    # application again
     magicalNumber.plus a > @
+\end{ffcode}
 
-# variable-length attribute abstraction
+Variable-length attribute abstraction
+\begin{ffcode}
 [args...] > app
-  # the next five lines are examples of 
-  # application
   stdout > @
     sprintf
       "\n%d\n%d\n"
       args.at 0
       magicalObject.magicalNumber.plus a
+\end{ffcode}
 
-# anonymous abstraction
+Anonymous abstraction
+\begin{ffcode}
 [args...] > app
   reduced. > sum
-    (list args)
+    list args
     0
-    [accumulator current] # <--- this is anonymous
-    # abstraction
+    # this is anonymous abstraction
+    [accumulator current]
       plus. > @
         accumulator
         (text current).as-int
+\end{ffcode}
 
-# inline anonymous abstraction
+Inline anonymous abstraction
+\begin{ffcode}
 [args...] > app
   reduce. > sum
-    args
+    list args
     0
     # abstraction
     [accumulator current] (accumulator.plus (text current).as-int > @)
@@ -319,6 +319,9 @@ The application syntax is quite wide, so let's point out the constituents to per
     \item (optional) Binding to a name ( $>$ myObject).
     \item (optional) The copied object may be declared as constant (i.e., dataized only once (see this section)), if the object is bound to a name (see \#3). For this, the ! operator is used.
 \end{enumerate}
+
+\subsubsection{Examples}
+
 Here application with no binding
 \begin{ffcode}
 42 > magicalNumber
@@ -352,7 +355,6 @@ Essentially, application is used to bind free attributes of abstract objects to 
 We can partially apply it to create a new, more specific concept:
 \begin{ffcode}
 sum 10 > addTen
-# we can apply this copied object, too
 addTen 10 > twenty
 \end{ffcode}
 
@@ -403,7 +405,7 @@ The opposite is true. If the attribute x.attr or the object x itself are not use
 \begin{figure*}[h]
   \centering
   \includegraphics[width=1\textwidth,]{EOsyntxax.jpg}
-  \caption{EO Syntax}
+  \caption{EO syntax}
   \label{fig:uml1}
 \end{figure*}
 
