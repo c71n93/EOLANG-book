@@ -438,11 +438,11 @@ The EO Programming Language and The EO Standard Object Collection defines these 
 All primitives also have \texttt{as-hash} attribute, which, being an \texttt{int}, is their own implementation of a hash function. They also have \texttt{eq} attribute, which is \texttt{TRUE} if the primitive is equal to another object, through the use of \texttt{ˆ.as-bytes.eq}
 
 \section{bytes Data Type Object}
-The bytes data type object represents an abstraction of an sequence of bytes and can be empty or contain an theoretically unlimited number of bytes.
-Fully Qualified Name: org.eolang.bytes (no aliasing or FQN reference required since the object is automatically imported).
+The \texttt{bytes} data type object represents an abstraction of an sequence of bytes and can be empty or contain an theoretically unlimited number of bytes.
+Fully Qualified Name: \texttt{org.eolang.bytes} (no aliasing or FQN reference required since the object is automatically imported).
 
 \subsection{Syntax}
-The bytes data type object may be parsed by the EO compiler directly from the source code. The syntax rules for bool values are as follows.
+The \texttt{bytes} data type object may be parsed by the EO compiler directly from the source code. The syntax rules for \texttt{bytes} values are as follows.
 EBNF Notation:
 \begin{ffcode}
     BYTES   ::= BYTE ( ‘-’ BYTE ) | ‘--’
@@ -471,8 +471,7 @@ IN$:
 \subsection{bytes Attributes}
 
 \subsubsection{as-\textit{type} Attribute}
-The object bytes has these four attributes, to turn
-itself into one of four primitive data objects: \texttt{as-int}, \texttt{as-bool}, \texttt{as-float}, and \texttt{as-string}. 
+The object \texttt{bytes} has these four attributes, to turn itself into one of four primitive data objects: \texttt{as-int}, \texttt{as-bool}, \texttt{as-float}, and \texttt{as-string}. 
 The attribute \texttt{as-int} expects the size of the sequence to be less or equal to eight. The attribute \texttt{as-bool} is \texttt{FALSE} only if all bytes equal to zero. The attribute \texttt{as-float} expects exactly eight bytes.
 
 Example
@@ -501,8 +500,8 @@ IN$:
 \end{ffcode}
 
 \subsubsection{eq Attribute}
-The eq attribute object is used for testing if two bytes objects are equal. The eq attribute object has one free attribute x of type bytes that is the second object (the first object is the base object of the eq attribute).
-If the eq attribute object is applied, it represents the result of the equality test (either true (if the objects are equal) or false (otherwise)).
+The \texttt{eq} attribute object is used for testing if two bytes objects are equal. The \texttt{eq} attribute object has one free attribute of type \texttt{bytes} that is the second object (the first object is the base object of the \texttt{eq} attribute).
+If the \texttt{eq} attribute object is applied, it represents the result of the equality test (either true (if the objects are equal) or false (otherwise)).
 
 Example
 \begin{ffcode}
@@ -526,7 +525,7 @@ IN$:
 \end{ffcode}
 
 \subsubsection{and, or, xor Attributes}
-Attributes objects and, or, xor are used for the bitwise operation of the same name. This attributes objects has one free attribute x of type bytes that is the second object (the first object is the base object of the and attribute).
+Attributes objects \texttt{and}, \texttt{or}, \texttt{xor} are used for the bitwise operation of the same name. These attributes objects has one free attribute of type \texttt{bytes} that is the second object (the first object is the base object of these attributes).
 
 Example
 \begin{ffcode}
@@ -558,7 +557,7 @@ IN$:
 \end{ffcode}
 
 \subsubsection{not Attributes}
-The not attribute object is used for the bitwise operation of the same name. This attributes objects has no free attributes.
+The \texttt{not} attribute object is used for the bitwise operation of the same name. This attribute object has no free attributes.
 
 Example
 \begin{ffcode}
@@ -582,8 +581,7 @@ IN$:
 \end{ffcode}
 
 \subsubsection{left, right Attributes}
-Attributes objects left, right are used for left and right bitwise shift. This attributes objects has one free attribute x of type int that is the second object (the first object is the base object of the and attribute).
-The free attribute x specifies how many bits to shift.
+Attributes objects \texttt{left}, \texttt{right} are used for left and right bitwise shift. This attributes objects has one free attribute of type \texttt{int} that is the second object (the first object is the base object of these attributes). This free attribute specifies how many bits to shift.
 
 Example
 \begin{ffcode}
@@ -607,6 +605,75 @@ Running
 IN$: ./run.sh
 OUT>: true
 OUT>: true
+IN$: 
+\end{ffcode}
+
+\subsubsection{size Attribute}
+The \texttt{size} attribute object is used to find out the total number of bytes in the bytes sequence. This attribute object has no free attributes.
+
+Example
+\begin{ffcode}
++package sandbox
++alias stdout org.eolang.io.stdout
++alias org.eolang.txt.sprintf
+
+[args...] > app
+  stdout > @
+    sprintf
+      "%d\n"
+      FF-FF-F0.size
+    
+Running
+
+IN$: ./run.sh
+OUT>: 3
+IN$: 
+\end{ffcode}
+
+\subsubsection{slice Attribute}
+The \texttt{slice} attribute object is used to represents a bytes sub-sequence inside the current one. This attribute object has two free attributes of type \texttt{int}. The first attribute is the number of the element from which the sub-sequence starts, the second - at which the sub-sequence ends (included)
+
+Example
+\begin{ffcode}
++package sandbox
++alias stdout org.eolang.io.stdout
++alias org.eolang.txt.sprintf
+
+[args...] > app
+  stdout > @
+    sprintf
+      "%s\n"
+      as-string.
+        (FF-41-42-43-FF-FF.slice 1 3)
+    
+Running
+
+IN$: ./run.sh
+OUT>: ABC
+IN$: 
+\end{ffcode}
+
+\subsubsection{concat Attribute}
+The \texttt{concat} attribute object is used to make a new sequence, which is a concatenation of two byte sequences: the current and the provided one. This attribute object has one free attribute of type \texttt{bytes}. This free attribute provides a sequence of bytes to concatenate.
+
+Example
+\begin{ffcode}
++package sandbox
++alias stdout org.eolang.io.stdout
++alias org.eolang.txt.sprintf
+
+[args...] > app
+  stdout > @
+    sprintf
+      "%s\n"
+      as-string.
+        41-42.concat 43-44
+
+
+Running
+
+IN$: ./run.sh
+OUT>: ABCD
 IN$: 
 \end{ffcode}
 
